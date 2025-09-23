@@ -244,16 +244,6 @@ function BaseChatContent({
     return () => clearInterval(interval);
   }, [isNearBottom]);
 
-  // Auto-scroll when messages change during streaming
-  useEffect(() => {
-    if (messages.length > 0 && isFollowingStreamRef.current) {
-      console.log('📨 Messages updated - following stream, scrolling to bottom');
-      if (scrollRef.current) {
-        scrollRef.current.scrollToBottom();
-      }
-    }
-  }, [messages]);
-
   // Use shared chat engine
   const {
     messages,
@@ -331,6 +321,15 @@ function BaseChatContent({
     hasSecurityWarnings,
   } = useRecipeManager(chat, location.state?.recipeConfig);
 
+  // Auto-scroll when messages change during streaming
+  useEffect(() => {
+    if (messages.length > 0 && isFollowingStreamRef.current) {
+      console.log('📨 Messages updated - following stream, scrolling to bottom');
+      if (scrollRef.current) {
+        scrollRef.current.scrollToBottom();
+      }
+    }
+  }, [messages]);
   // Reset recipe usage tracking when recipe changes
   useEffect(() => {
     const previousTitle = currentRecipeTitle;
