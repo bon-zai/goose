@@ -199,6 +199,26 @@ function BaseChatContent({
         isFollowingStreamRef.current = false;
         console.log('🛑 FOLLOWING STOPPED - User scrolled away from bottom');
         console.log('📍 Stopped following stream - user scrolled away');
+        console.log('🔍 Scroll position debug:', {
+          scrollTop: (() => {
+            const vp = scrollRef.current as any;
+            return vp?.viewportRef?.current?.scrollTop || 'unknown';
+          })(),
+          scrollHeight: (() => {
+            const vp = scrollRef.current as any;
+            return vp?.viewportRef?.current?.scrollHeight || 'unknown';
+          })(),
+          clientHeight: (() => {
+            const vp = scrollRef.current as any;
+            return vp?.viewportRef?.current?.clientHeight || 'unknown';
+          })(),
+          distanceFromBottom: (() => {
+            const vp = scrollRef.current as any;
+            if (!vp?.viewportRef?.current) return 'unknown';
+            const { scrollHeight, scrollTop, clientHeight } = vp.viewportRef.current;
+            return scrollHeight - (scrollTop + clientHeight);
+          })()
+        });
       }
     };
 
@@ -321,13 +341,29 @@ function BaseChatContent({
     hasSecurityWarnings,
   } = useRecipeManager(chat, location.state?.recipeConfig);
 
-  // Auto-scroll when messages change during streaming
+  // Auto-scroll when messages change during streaming - ENHANCED DEBUG
   useEffect(() => {
-    if (messages.length > 0 && isFollowingStreamRef.current) {
-      console.log('📨 Messages updated - following stream, scrolling to bottom');
-      if (scrollRef.current) {
-        scrollRef.current.scrollToBottom();
+    console.log('🔍 Messages useEffect triggered:', {
+      messagesLength: messages.length,
+      isFollowing: isFollowingStreamRef.current,
+      hasScrollRef: !!scrollRef.current
+    });
+    
+    if (messages.length > 0) {
+      if (isFollowingStreamRef.current) {
+        console.log('📨 Messages updated - following stream, scrolling to bottom');
+        if (scrollRef.current) {
+          console.log('🚀 Calling scrollToBottom...');
+          scrollRef.current.scrollToBottom();
+          console.log('✅ scrollToBottom called successfully');
+        } else {
+          console.log('❌ scrollRef.current is null!');
+        }
+      } else {
+        console.log('⏸️ Messages updated but not following - isFollowing:', isFollowingStreamRef.current);
       }
+    } else {
+      console.log('📭 No messages yet');
     }
   }, [messages]);
   // Reset recipe usage tracking when recipe changes
