@@ -145,13 +145,19 @@ function BaseChatContent({
     }
 
     // Debounce the auto-scroll to prevent jumpy behavior and prevent multiple rapid scrolls
+    // Immediate scroll if following, with fallback timeout
+    if (isFollowingStreamRef.current && scrollRef.current) {
+      scrollRef.current.scrollToBottom();
+      console.log('📍 Auto-scrolled to follow stream (immediate)');
+    }
+    
+    // Also set a timeout as backup
     autoScrollTimeoutRef.current = window.setTimeout(() => {
-      // Only auto-scroll if user was following when the agent started responding
       if (isFollowingStreamRef.current && scrollRef.current) {
         scrollRef.current.scrollToBottom();
-        console.log('📍 Auto-scrolled to follow stream');
+        console.log('📍 Auto-scrolled to follow stream (timeout backup)');
       }
-    }, 150);
+    }, 50); // Reduced from 150ms to 50ms
   }, []);
 
   useEffect(() => {
@@ -186,10 +192,12 @@ function BaseChatContent({
       if (nearBottom && !isFollowingStreamRef.current) {
         // User scrolled back to bottom - resume following
         isFollowingStreamRef.current = true;
+        console.log('✅ FOLLOWING STARTED/RESUMED');
         console.log('📍 Resumed following stream - user at bottom');
       } else if (!nearBottom && isFollowingStreamRef.current) {
         // User scrolled away from bottom - stop following
         isFollowingStreamRef.current = false;
+        console.log('🛑 FOLLOWING STOPPED - User scrolled away from bottom');
         console.log('📍 Stopped following stream - user scrolled away');
       }
     };
@@ -218,17 +226,19 @@ function BaseChatContent({
     };
   }, []); // Remove handleScrollChange dependency to avoid re-creating listener
 
-  // Periodic check to ensure following state stays correct
-  useEffect(() => {
+  // More frequent check to ensure following state stays correct
     const interval = setInterval(() => {
       if (scrollRef.current) {
         const nearBottom = isNearBottom();
         if (nearBottom && !isFollowingStreamRef.current) {
           isFollowingStreamRef.current = true;
+        console.log('✅ FOLLOWING STARTED/RESUMED');
           console.log('🔄 Periodic check: Resumed following stream');
+          // Immediately scroll if we just resumed following
+          scrollRef.current.scrollToBottom();
         }
       }
-    }, 2000); // Check every 2 seconds
+    }, 500); // Check every 500ms instead of 2 seconds
 
     return () => clearInterval(interval);
   }, [isNearBottom]);
@@ -261,6 +271,7 @@ function BaseChatContent({
     chat,
     setChat,
     onMessageStreamFinish: () => {
+      console.log('🏁 Stream finished - calling conditionalAutoScroll');
       conditionalAutoScroll();
 
       // Call the original callback if provided
@@ -275,6 +286,7 @@ function BaseChatContent({
     },
     onMessageSent: () => {
       isFollowingStreamRef.current = true;
+        console.log('✅ FOLLOWING STARTED/RESUMED');
       console.log('📤 Message sent - will follow response');
       // Ensure we scroll to bottom immediately when sending
       setTimeout(() => {
