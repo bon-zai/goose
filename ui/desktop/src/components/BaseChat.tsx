@@ -227,6 +227,7 @@ function BaseChatContent({
   }, []); // Remove handleScrollChange dependency to avoid re-creating listener
 
   // More frequent check to ensure following state stays correct
+  useEffect(() => {
     const interval = setInterval(() => {
       if (scrollRef.current) {
         const nearBottom = isNearBottom();
