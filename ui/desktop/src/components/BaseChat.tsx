@@ -445,7 +445,7 @@ function BaseChatContent({
           <ScrollArea
             ref={scrollRef}
             className={`flex-1 bg-background-default rounded-b-2xl min-h-0 relative ${contentClassName}`}
-            autoScroll
+            autoScroll={false}
             onDrop={handleDrop}
             onDragOver={handleDragOver}
             data-drop-zone="true"
