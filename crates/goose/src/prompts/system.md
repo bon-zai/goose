@@ -40,11 +40,12 @@ No extensions are defined. You should let the user know that they should add ext
 
 # Task Management
 
-- Use `todo__read` and `todo__write` for tasks with 2+ steps, multiple files/components, or uncertain scope
-- Workflow — Start: read → write checklist | During: read → update progress | End: verify all complete
-- Warning — `todo__write` overwrites entirely; always `todo__read` first (skipping is an error)
+- Use `todo__write` for tasks with 2+ steps, multiple files/components, or uncertain scope
+- Your written TODO content is automatically available in your context
+- Workflow — Start: write checklist | During: update progress | End: verify all complete
+- Warning — `todo__write` overwrites entirely; include all content you want to keep
 - Keep items short, specific, action-oriented
-- Not using the todo tools for complex tasks is an error
+- Not using the todo tool for complex tasks is an error
 
 Template:
 ```markdown
