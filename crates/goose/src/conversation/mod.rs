@@ -1,4 +1,4 @@
-use crate::conversation::message::{Message, MessageContent};
+use crate::conversation::message::{Message, MessageContent, MessageMetadata};
 use rmcp::model::Role;
 use serde::{Deserialize, Serialize};
 use std::collections::HashSet;
@@ -100,6 +100,46 @@ impl Conversation {
 
     pub fn clear(&mut self) {
         self.0.clear();
+    }
+
+    /// Filter messages based on visibility criteria.
+    ///
+    /// # Arguments
+    /// * `filter` - A closure that takes a MessageMetadata and returns whether to include the message
+    ///
+    /// # Examples
+    /// ```
+    /// // Get only agent-visible messages
+    /// let agent_messages = conversation.filtered_messages(|meta| meta.agent_visible);
+    ///
+    /// // Get only user-visible messages
+    /// let user_messages = conversation.filtered_messages(|meta| meta.user_visible);
+    ///
+    /// // Get messages visible to both user and agent
+    /// let both_visible = conversation.filtered_messages(|meta| meta.user_visible && meta.agent_visible);
+    ///
+    /// // Get agent-visible messages regardless of user visibility
+    /// let agent_only = conversation.filtered_messages(|meta| meta.agent_visible);
+    /// ```
+    pub fn filtered_messages<F>(&self, filter: F) -> Vec<Message>
+    where
+        F: Fn(&MessageMetadata) -> bool,
+    {
+        self.0
+            .iter()
+            .filter(|msg| filter(&msg.metadata))
+            .cloned()
+            .collect()
+    }
+
+    /// Get only messages that are visible to the agent
+    pub fn agent_visible_messages(&self) -> Vec<Message> {
+        self.filtered_messages(|meta| meta.agent_visible)
+    }
+
+    /// Get only messages that are visible to the user
+    pub fn user_visible_messages(&self) -> Vec<Message> {
+        self.filtered_messages(|meta| meta.user_visible)
     }
 
     fn validate(self) -> Result<Self, InvalidConversation> {
@@ -530,5 +570,87 @@ mod tests {
 
         let (_fixed, issues) = run_verify(messages);
         assert_eq!(issues.len(), 0);
+    }
+
+    #[test]
+    fn test_filtered_messages() {
+        use crate::conversation::message::MessageMetadata;
+
+        let conversation = Conversation::new_unvalidated(vec![
+            Message::user().with_text("User message 1"),
+            Message::assistant()
+                .with_text("Assistant message 1")
+                .with_visibility(true, true), // Both visible
+            Message::user()
+                .with_text("User message 2")
+                .with_metadata(MessageMetadata::agent_only()), // Only agent visible
+            Message::assistant()
+                .with_text("Assistant message 2")
+                .with_metadata(MessageMetadata::user_only()), // Only user visible
+            Message::user()
+                .with_text("User message 3")
+                .with_metadata(MessageMetadata::invisible()), // Neither visible
+        ]);
+
+        // Test filtering for agent-visible messages
+        let agent_messages = conversation.filtered_messages(|meta| meta.agent_visible);
+        assert_eq!(agent_messages.len(), 3); // Messages 0, 1, 2
+        assert_eq!(agent_messages[0].as_concat_text(), "User message 1");
+        assert_eq!(agent_messages[1].as_concat_text(), "Assistant message 1");
+        assert_eq!(agent_messages[2].as_concat_text(), "User message 2");
+
+        // Test filtering for user-visible messages
+        let user_messages = conversation.filtered_messages(|meta| meta.user_visible);
+        assert_eq!(user_messages.len(), 3); // Messages 0, 1, 3
+        assert_eq!(user_messages[0].as_concat_text(), "User message 1");
+        assert_eq!(user_messages[1].as_concat_text(), "Assistant message 1");
+        assert_eq!(user_messages[2].as_concat_text(), "Assistant message 2");
+
+        // Test filtering for messages visible to both
+        let both_visible =
+            conversation.filtered_messages(|meta| meta.user_visible && meta.agent_visible);
+        assert_eq!(both_visible.len(), 2); // Messages 0, 1
+        assert_eq!(both_visible[0].as_concat_text(), "User message 1");
+        assert_eq!(both_visible[1].as_concat_text(), "Assistant message 1");
+
+        // Test filtering for invisible messages
+        let invisible =
+            conversation.filtered_messages(|meta| !meta.user_visible && !meta.agent_visible);
+        assert_eq!(invisible.len(), 1); // Message 4
+        assert_eq!(invisible[0].as_concat_text(), "User message 3");
+
+        // Test "don't care" scenario - agent must be visible, don't care about user
+        let agent_regardless_of_user = conversation.filtered_messages(|meta| meta.agent_visible);
+        assert_eq!(agent_regardless_of_user.len(), 3); // Messages 0, 1, 2
+    }
+
+    #[test]
+    fn test_convenience_filter_methods() {
+        use crate::conversation::message::MessageMetadata;
+
+        let conversation = Conversation::new_unvalidated(vec![
+            Message::user().with_text("User message 1"),
+            Message::assistant()
+                .with_text("Assistant message 1")
+                .with_metadata(MessageMetadata::agent_only()),
+            Message::user()
+                .with_text("User message 2")
+                .with_metadata(MessageMetadata::user_only()),
+            Message::assistant()
+                .with_text("Assistant message 2")
+                .with_metadata(MessageMetadata::invisible()),
+        ]);
+
+        // Test agent_visible_messages()
+        let agent_messages = conversation.agent_visible_messages();
+        assert_eq!(agent_messages.len(), 2); // Messages 0, 1
+        assert_eq!(agent_messages[0].as_concat_text(), "User message 1");
+        assert_eq!(agent_messages[1].as_concat_text(), "Assistant message 1");
+
+        // Test user_visible_messages()
+        let user_messages = conversation.user_visible_messages();
+        assert_eq!(user_messages.len(), 2); // Messages 0, 2
+        assert_eq!(user_messages[0].as_concat_text(), "User message 1");
+        assert_eq!(user_messages[1].as_concat_text(), "User message 2");
     }
 }
