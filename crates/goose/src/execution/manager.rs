@@ -62,7 +62,7 @@ impl AgentManager {
                 Ok(Arc::new(manager))
             })
             .await
-            .map(|arc| arc.clone())
+            .cloned()
     }
 
     pub async fn scheduler(&self) -> Result<Arc<dyn SchedulerTrait>> {
