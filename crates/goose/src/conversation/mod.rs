@@ -109,17 +109,23 @@ impl Conversation {
     ///
     /// # Examples
     /// ```
-    /// // Get only agent-visible messages
+    /// // Get agent-visible messages regardless of user visibility (don't care about user_visible)
     /// let agent_messages = conversation.filtered_messages(|meta| meta.agent_visible);
     ///
-    /// // Get only user-visible messages
+    /// // Get user-visible messages regardless of agent visibility (don't care about agent_visible)
     /// let user_messages = conversation.filtered_messages(|meta| meta.user_visible);
     ///
-    /// // Get messages visible to both user and agent
+    /// // Get messages visible to BOTH user and agent
     /// let both_visible = conversation.filtered_messages(|meta| meta.user_visible && meta.agent_visible);
     ///
-    /// // Get agent-visible messages regardless of user visibility
-    /// let agent_only = conversation.filtered_messages(|meta| meta.agent_visible);
+    /// // Get messages visible ONLY to agent (not visible to user)
+    /// let agent_only = conversation.filtered_messages(|meta| meta.agent_visible && !meta.user_visible);
+    ///
+    /// // Get messages visible ONLY to user (not visible to agent)
+    /// let user_only = conversation.filtered_messages(|meta| meta.user_visible && !meta.agent_visible);
+    ///
+    /// // Get invisible messages (neither user nor agent can see)
+    /// let invisible = conversation.filtered_messages(|meta| !meta.user_visible && !meta.agent_visible);
     /// ```
     pub fn filtered_messages<F>(&self, filter: F) -> Vec<Message>
     where
@@ -652,5 +658,61 @@ mod tests {
         assert_eq!(user_messages.len(), 2); // Messages 0, 2
         assert_eq!(user_messages[0].as_concat_text(), "User message 1");
         assert_eq!(user_messages[1].as_concat_text(), "User message 2");
+    }
+
+    #[test]
+    fn test_specific_visibility_combinations() {
+        let conversation = Conversation::new_unvalidated(vec![
+            Message::user()
+                .with_text("Both visible")
+                .with_visibility(true, true),
+            Message::assistant()
+                .with_text("Agent only")
+                .with_visibility(false, true), // user_visible: false, agent_visible: true
+            Message::user()
+                .with_text("User only")
+                .with_visibility(true, false), // user_visible: true, agent_visible: false
+            Message::assistant()
+                .with_text("Neither visible")
+                .with_visibility(false, false),
+        ]);
+
+        // Get messages visible ONLY to agent (agent_visible: true, user_visible: false)
+        let agent_only =
+            conversation.filtered_messages(|meta| meta.agent_visible && !meta.user_visible);
+        assert_eq!(agent_only.len(), 1);
+        assert_eq!(agent_only[0].as_concat_text(), "Agent only");
+
+        // Get messages visible ONLY to user (user_visible: true, agent_visible: false)
+        let user_only =
+            conversation.filtered_messages(|meta| meta.user_visible && !meta.agent_visible);
+        assert_eq!(user_only.len(), 1);
+        assert_eq!(user_only[0].as_concat_text(), "User only");
+
+        // Get messages visible to BOTH (user_visible: true, agent_visible: true)
+        let both_visible =
+            conversation.filtered_messages(|meta| meta.user_visible && meta.agent_visible);
+        assert_eq!(both_visible.len(), 1);
+        assert_eq!(both_visible[0].as_concat_text(), "Both visible");
+
+        // Get messages visible to NEITHER (user_visible: false, agent_visible: false)
+        let neither_visible =
+            conversation.filtered_messages(|meta| !meta.user_visible && !meta.agent_visible);
+        assert_eq!(neither_visible.len(), 1);
+        assert_eq!(neither_visible[0].as_concat_text(), "Neither visible");
+
+        // Get all agent-visible messages (regardless of user visibility)
+        // This includes "Both visible" and "Agent only"
+        let all_agent_visible = conversation.filtered_messages(|meta| meta.agent_visible);
+        assert_eq!(all_agent_visible.len(), 2);
+        assert_eq!(all_agent_visible[0].as_concat_text(), "Both visible");
+        assert_eq!(all_agent_visible[1].as_concat_text(), "Agent only");
+
+        // Get all user-visible messages (regardless of agent visibility)
+        // This includes "Both visible" and "User only"
+        let all_user_visible = conversation.filtered_messages(|meta| meta.user_visible);
+        assert_eq!(all_user_visible.len(), 2);
+        assert_eq!(all_user_visible[0].as_concat_text(), "Both visible");
+        assert_eq!(all_user_visible[1].as_concat_text(), "User only");
     }
 }
