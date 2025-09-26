@@ -49,7 +49,6 @@ export default function ExtensionsView({
   // Scroll to extension after refresh if extensionId is provided
   useEffect(() => {
     if (viewOptions.extensionId && refreshKey > 0) {
-      // Use setTimeout to ensure the DOM has been updated after the refresh
       setTimeout(() => {
         const element = document.getElementById(`extension-${viewOptions.extensionId}`);
         if (element) {
