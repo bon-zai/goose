@@ -108,7 +108,11 @@ impl Conversation {
     /// * `filter` - A closure that takes a MessageMetadata and returns whether to include the message
     ///
     /// # Examples
-    /// ```no_run
+    /// ```
+    /// # use goose::conversation::{Conversation, message::Message};
+    /// # let conversation = Conversation::new_unvalidated(vec![
+    /// #     Message::user().with_text("Hello")
+    /// # ]);
     /// // Get agent-visible messages regardless of user visibility (don't care about user_visible)
     /// let agent_messages = conversation.filtered_messages(|meta| meta.agent_visible);
     ///
