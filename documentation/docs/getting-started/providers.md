@@ -10,7 +10,7 @@ import { ModelSelectionTip } from '@site/src/components/ModelSelectionTip';
 
 # Supported LLM Providers
 
-Goose is compatible with a wide range of LLM providers, allowing you to choose and integrate your preferred model.
+goose is compatible with a wide range of LLM providers, allowing you to choose and integrate your preferred model.
 
 :::tip Model Selection
 <ModelSelectionTip/>
@@ -33,8 +33,8 @@ Goose is compatible with a wide range of LLM providers, allowing you to choose a
 | [Groq](https://groq.com/)                                                   | High-performance inference hardware and tools for LLMs.                                                                                                                                                                   | `GROQ_API_KEY`                                                                                                                                                                      |
 | [LiteLLM](https://docs.litellm.ai/docs/) | LiteLLM proxy supporting multiple models with automatic prompt caching and unified API access. | `LITELLM_HOST`, `LITELLM_BASE_PATH` (optional), `LITELLM_API_KEY` (optional), `LITELLM_CUSTOM_HEADERS` (optional), `LITELLM_TIMEOUT` (optional) |
 | [Ollama](https://ollama.com/)                                               | Local model runner supporting Qwen, Llama, DeepSeek, and other open-source models. **Because this provider runs locally, you must first [download and run a model](#local-llms).**  | `OLLAMA_HOST`                                                                                                                                                                       |
-| [Ramalama](https://ramalama.ai/)                                            | Local model using native [OCI](https://opencontainers.org/) container runtimes, [CNCF](https://www.cncf.io/) tools, and supporting models as OCI artifacts. Ramalama API an compatible alternative to Ollama and can be used with the Goose Ollama provider. Supports Qwen, Llama, DeepSeek, and other open-source models. **Because this provider runs locally, you must first [download and run a model](#local-llms).**  | `OLLAMA_HOST`                                                                                                                                                                       |
-| [OpenAI](https://platform.openai.com/api-keys)                              | Provides gpt-4o, o1, and other advanced language models. Also supports OpenAI-compatible endpoints (e.g., self-hosted LLaMA, vLLM, KServe). **o1-mini and o1-preview are not supported because Goose uses tool calling.** | `OPENAI_API_KEY`, `OPENAI_HOST` (optional), `OPENAI_ORGANIZATION` (optional), `OPENAI_PROJECT` (optional), `OPENAI_CUSTOM_HEADERS` (optional)                                       |
+| [Ramalama](https://ramalama.ai/)                                            | Local model using native [OCI](https://opencontainers.org/) container runtimes, [CNCF](https://www.cncf.io/) tools, and supporting models as OCI artifacts. Ramalama API an compatible alternative to Ollama and can be used with the goose Ollama provider. Supports Qwen, Llama, DeepSeek, and other open-source models. **Because this provider runs locally, you must first [download and run a model](#local-llms).**  | `OLLAMA_HOST`                                                                                                                                                                       |
+| [OpenAI](https://platform.openai.com/api-keys)                              | Provides gpt-4o, o1, and other advanced language models. Also supports OpenAI-compatible endpoints (e.g., self-hosted LLaMA, vLLM, KServe). **o1-mini and o1-preview are not supported because goose uses tool calling.** | `OPENAI_API_KEY`, `OPENAI_HOST` (optional), `OPENAI_ORGANIZATION` (optional), `OPENAI_PROJECT` (optional), `OPENAI_CUSTOM_HEADERS` (optional)                                       |
 | [OpenRouter](https://openrouter.ai/)                                        | API gateway for unified access to various models with features like rate-limiting management.                                                                                                                             | `OPENROUTER_API_KEY`                                                                                                                                                                |
 | [Snowflake](https://docs.snowflake.com/user-guide/snowflake-cortex/aisql#choosing-a-model) | Access the latest models using Snowflake Cortex services, including Claude models. **Requires a Snowflake account and programmatic access token (PAT)**.                                                     | `SNOWFLAKE_HOST`, `SNOWFLAKE_TOKEN`                                                                                                                                                                 |
 | [Tetrate Agent Router Service](https://router.tetrate.ai)                   | Unified API gateway for AI models including Claude, Gemini, GPT, open-weight models, and others. Supports PKCE authentication flow for secure API key generation.                                                                                | `TETRATE_API_KEY`, `TETRATE_HOST` (optional)                                                                                                                                        |
@@ -43,7 +43,7 @@ Goose is compatible with a wide range of LLM providers, allowing you to choose a
 
 ## CLI Providers
 
-Goose also supports special "pass-through" providers that work with existing CLI tools, allowing you to use your subscriptions instead of paying per token:
+goose also supports special "pass-through" providers that work with existing CLI tools, allowing you to use your subscriptions instead of paying per token:
 
 | Provider                                                                    | Description                                                                                                                                                                                                               | Requirements                                                                                                                                                                          |
 |-----------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -58,10 +58,10 @@ CLI providers are cost-effective alternatives that use your existing subscriptio
    
 ## Configure Provider
 
-To configure your chosen provider or see available options, visit the `Models` tab in the Goose Desktop or run `goose configure` in the CLI.
+To configure your chosen provider or see available options, visit the `Models` tab in the goose desktop or run `goose configure` in the CLI.
 
 <Tabs groupId="interface">
-  <TabItem value="ui" label="Goose Desktop" default>
+  <TabItem value="ui" label="goose desktop" default>
   **To update your LLM provider and API key:** 
   1. Click the <PanelLeft className="inline" size={16} /> button in the top-left to open the sidebar
   2. Click the `Settings` button on the sidebar
@@ -89,7 +89,7 @@ To configure your chosen provider or see available options, visit the `Models` t
   3. Click the `Models` tab
   4. Click `Reset Provider and Model` to clear your current settings and return to the welcome screen
   </TabItem>
-  <TabItem value="cli" label="Goose CLI">
+  <TabItem value="cli" label="goose CLI">
     1. Run the following command: 
 
     ```sh
@@ -163,7 +163,7 @@ To configure your chosen provider or see available options, visit the `Models` t
 
 ## Using Custom OpenAI Endpoints
 
-Goose supports using custom OpenAI-compatible endpoints, which is particularly useful for:
+goose supports using custom OpenAI-compatible endpoints, which is particularly useful for:
 - Self-hosted LLMs (e.g., LLaMA, Mistral) using vLLM or KServe
 - Private OpenAI-compatible API servers
 - Enterprise deployments requiring data governance and security compliance
@@ -220,7 +220,7 @@ Goose supports using custom OpenAI-compatible endpoints, which is particularly u
 ### Setup Instructions
 
 <Tabs groupId="interface">
-  <TabItem value="ui" label="Goose Desktop" default>
+  <TabItem value="ui" label="goose desktop" default>
     1. Click the <PanelLeft className="inline" size={16} /> button in the top-left to open the sidebar
     2. Click the `Settings` button on the sidebar
     3. Click the `Models` tab
@@ -233,7 +233,7 @@ Goose supports using custom OpenAI-compatible endpoints, which is particularly u
        - Project (for resource management)
     7. Click `Submit`
   </TabItem>
-  <TabItem value="cli" label="Goose CLI">
+  <TabItem value="cli" label="goose CLI">
     1. Run `goose configure`
     2. Select `Configure Providers`
     3. Choose `OpenAI` as the provider
@@ -249,19 +249,19 @@ Goose supports using custom OpenAI-compatible endpoints, which is particularly u
 For enterprise deployments, you can pre-configure these values using environment variables or configuration files to ensure consistent governance across your organization.
 :::
 
-## Using Goose for Free
+## Using goose for Free
 
-Goose is a free and open source AI agent that you can start using right away, but not all supported [LLM Providers][providers] provide a free tier. 
+goose is a free and open source AI agent that you can start using right away, but not all supported [LLM Providers][providers] provide a free tier. 
 
 Below, we outline a couple of free options and how to get started with them.
 
 :::warning Limitations
-These free options are a great way to get started with Goose and explore its capabilities. However, you may need to upgrade your LLM for better performance.
+These free options are a great way to get started with goose and explore its capabilities. However, you may need to upgrade your LLM for better performance.
 :::
 
 
 ### Groq
-Groq provides free access to open source models with high-speed inference. To use Groq with Goose, you need an API key from [Groq Console](https://console.groq.com/keys).
+Groq provides free access to open source models with high-speed inference. To use Groq with goose, you need an API key from [Groq Console](https://console.groq.com/keys).
 
 Groq offers several open source models that support tool calling:
 - **moonshotai/kimi-k2-instruct** - Mixture-of-Experts model with 1 trillion parameters, optimized for agentic intelligence and tool use
@@ -269,10 +269,10 @@ Groq offers several open source models that support tool calling:
 - **gemma2-9b-it** - Google's Gemma 2 model with instruction tuning
 - **llama-3.3-70b-versatile** - Meta's Llama 3.3 model for versatile applications
 
-To set up Groq with Goose, follow these steps:
+To set up Groq with goose, follow these steps:
 
 <Tabs groupId="interface">
-  <TabItem value="ui" label="Goose Desktop" default>
+  <TabItem value="ui" label="goose desktop" default>
   **To update your LLM provider and API key:** 
 
     1. Click the <PanelLeft className="inline" size={16} /> button in the top-left to open the sidebar.
@@ -283,7 +283,7 @@ To set up Groq with Goose, follow these steps:
     6. Click `Configure`, enter your API key, and click `Submit`.
 
   </TabItem>
-  <TabItem value="cli" label="Goose CLI">
+  <TabItem value="cli" label="goose CLI">
     1. Run: 
     ```sh
     goose configure
@@ -296,12 +296,12 @@ To set up Groq with Goose, follow these steps:
 </Tabs>
 
 ### Google Gemini
-Google Gemini provides a free tier. To start using the Gemini API with Goose, you need an API Key from [Google AI studio](https://aistudio.google.com/app/apikey).
+Google Gemini provides a free tier. To start using the Gemini API with goose, you need an API Key from [Google AI studio](https://aistudio.google.com/app/apikey).
 
-To set up Google Gemini with Goose, follow these steps:
+To set up Google Gemini with goose, follow these steps:
 
 <Tabs groupId="interface">
-  <TabItem value="ui" label="Goose Desktop" default>
+  <TabItem value="ui" label="goose desktop" default>
   **To update your LLM provider and API key:** 
 
     1. Click the <PanelLeft className="inline" size={16} /> button in the top-left to open the sidebar.
@@ -312,7 +312,7 @@ To set up Google Gemini with Goose, follow these steps:
     6. Click `Configure`, enter your API key, and click `Submit`.
 
   </TabItem>
-  <TabItem value="cli" label="Goose CLI">
+  <TabItem value="cli" label="goose CLI">
     1. Run: 
     ```sh
     goose configure
@@ -347,10 +347,10 @@ To set up Google Gemini with Goose, follow these steps:
 
 ### Local LLMs
 
-Goose is a local AI agent, and by using a local LLM, you keep your data private, maintain full control over your environment, and can work entirely offline without relying on cloud access. However, please note that local LLMs require a bit more set up before you can use one of them with Goose.
+goose is a local AI agent, and by using a local LLM, you keep your data private, maintain full control over your environment, and can work entirely offline without relying on cloud access. However, please note that local LLMs require a bit more set up before you can use one of them with goose.
 
 :::warning Limited Support for models without tool calling
-Goose extensively uses tool calling, so models without it can only do chat completion. If using models without tool calling, all Goose [extensions must be disabled](/docs/getting-started/using-extensions#enablingdisabling-extensions).
+goose extensively uses tool calling, so models without it can only do chat completion. If using models without tool calling, all goose [extensions must be disabled](/docs/getting-started/using-extensions#enablingdisabling-extensions).
 :::
 
 Here are some local providers we support:
@@ -362,7 +362,7 @@ Here are some local providers we support:
         1. [Download Ramalama](https://github.com/containers/ramalama?tab=readme-ov-file#install).
         2. In a terminal, run any Ollama [model supporting tool-calling](https://ollama.com/search?c=tools) or [GGUF format HuggingFace Model](https://huggingface.co/search/full-text?q=%22tools+support%22+%2B+%22gguf%22&type=model):
 
-          The `--runtime-args="--jinja"` flag is required for Ramalama to work with the Goose Ollama provider.
+          The `--runtime-args="--jinja"` flag is required for Ramalama to work with the goose Ollama provider.
 
           Example:
 
@@ -370,7 +370,7 @@ Here are some local providers we support:
           ramalama serve --runtime-args="--jinja" ollama://qwen2.5
           ```
 
-          3. In a separate terminal window, configure with Goose:
+          3. In a separate terminal window, configure with goose:
 
           ```sh
           goose configure
@@ -388,7 +388,7 @@ Here are some local providers we support:
           └
           ```
 
-          5. Choose `Ollama` as the model provider since Ramalama is API compatible and can use the Goose Ollama provider
+          5. Choose `Ollama` as the model provider since Ramalama is API compatible and can use the goose Ollama provider
 
           ```
           ┌   goose-configure
@@ -451,12 +451,12 @@ Here are some local providers we support:
           ```
 
           :::tip Context Length
-          If you notice that Goose is having trouble using extensions or is ignoring [.goosehints](/docs/guides/using-goosehints), it is likely that the model's default context length of 2048 tokens is too low. Use `ramalama serve` to set the `--ctx-size, -c` option to a [higher value](https://github.com/containers/ramalama/blob/main/docs/ramalama-serve.1.md#--ctx-size--c).
+          If you notice that goose is having trouble using extensions or is ignoring [.goosehints](/docs/guides/using-goosehints), it is likely that the model's default context length of 2048 tokens is too low. Use `ramalama serve` to set the `--ctx-size, -c` option to a [higher value](https://github.com/containers/ramalama/blob/main/docs/ramalama-serve.1.md#--ctx-size--c).
           :::
 
       </TabItem>
       <TabItem value="deepseek" label="DeepSeek-R1">
-        The native `DeepSeek-r1` model doesn't support tool calling, however, we have a [custom model](https://ollama.com/michaelneale/deepseek-r1-goose) you can use with Goose. 
+        The native `DeepSeek-r1` model doesn't support tool calling, however, we have a [custom model](https://ollama.com/michaelneale/deepseek-r1-goose) you can use with goose. 
 
         :::warning
         Note that this is a 70B model size and requires a powerful device to run smoothly.
@@ -470,7 +470,7 @@ Here are some local providers we support:
         ollama run michaelneale/deepseek-r1-goose
         ```
 
-        3. In a separate terminal window, configure with Goose:
+        3. In a separate terminal window, configure with goose:
 
         ```sh
         goose configure
@@ -555,7 +555,7 @@ Here are some local providers we support:
           ollama run qwen2.5
           ```
 
-        3. In a separate terminal window, configure with Goose:
+        3. In a separate terminal window, configure with goose:
 
           ```sh
           goose configure
@@ -638,7 +638,7 @@ Here are some local providers we support:
         ```
 
         :::tip Context Length
-        If you notice that Goose is having trouble using extensions or is ignoring [.goosehints](/docs/guides/using-goosehints), it is likely that the model's default context length of 4096 tokens is too low. Set the `OLLAMA_CONTEXT_LENGTH` environment variable to a [higher value](https://github.com/ollama/ollama/blob/main/docs/faq.md#how-can-i-specify-the-context-window-size).
+        If you notice that goose is having trouble using extensions or is ignoring [.goosehints](/docs/guides/using-goosehints), it is likely that the model's default context length of 4096 tokens is too low. Set the `OLLAMA_CONTEXT_LENGTH` environment variable to a [higher value](https://github.com/ollama/ollama/blob/main/docs/faq.md#how-can-i-specify-the-context-window-size).
         :::
         
       </TabItem>
@@ -655,7 +655,7 @@ Here are some local providers we support:
     docker model pull hf.co/unsloth/gemma-3n-e4b-it-gguf:q6_k
     ```
 
-    4. Configure Goose to use Docker Model Runner, using the OpenAI API compatible endpoint: 
+    4. Configure goose to use Docker Model Runner, using the OpenAI API compatible endpoint: 
 
     ```sh
     goose configure
@@ -718,7 +718,7 @@ Here are some local providers we support:
 
     Docker model runner uses `/engines/llama.cpp/v1/chat/completions` for the base path.
 
-    9. Finally configure the model available in Docker Model Runner to be used by Goose: `hf.co/unsloth/gemma-3n-e4b-it-gguf:q6_k`
+    9. Finally configure the model available in Docker Model Runner to be used by goose: `hf.co/unsloth/gemma-3n-e4b-it-gguf:q6_k`
 
     ```
     │
@@ -735,7 +735,7 @@ Here are some local providers we support:
 
 ## Azure OpenAI Credential Chain
 
-Goose supports two authentication methods for Azure OpenAI:
+goose supports two authentication methods for Azure OpenAI:
 
 1. **API Key Authentication** - Uses the `AZURE_OPENAI_API_KEY` for direct authentication
 2. **Azure Credential Chain** - Uses Azure CLI credentials automatically without requiring an API key
@@ -747,9 +747,17 @@ To use the Azure Credential Chain:
 
 This method simplifies authentication and enhances security for enterprise environments.
 
+## Multi-Model Configuration
+
+Beyond single-model setups, goose supports [multi-model configurations](/docs/guides/multi-model/) that can use different models and providers for specialized tasks:
+
+- **AutoPilot** - Intelligent, context-aware switching between specialized models based on conversation content and complexity
+- **Lead/Worker Model** - Automatic switching between a lead model for initial turns and a worker model for execution tasks
+- **Planning Mode** - Manual planning phase using a dedicated model to create detailed project breakdowns before execution
+
 ---
 
-If you have any questions or need help with a specific provider, feel free to reach out to us on [Discord](https://discord.gg/block-opensource) or on the [Goose repo](https://github.com/block/goose).
+If you have any questions or need help with a specific provider, feel free to reach out to us on [Discord](https://discord.gg/block-opensource) or on the [goose repo](https://github.com/block/goose).
 
 
 [providers]: /docs/getting-started/providers
