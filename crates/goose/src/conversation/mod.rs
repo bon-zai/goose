@@ -112,20 +112,8 @@ impl Conversation {
     /// // Get agent-visible messages regardless of user visibility (don't care about user_visible)
     /// let agent_messages = conversation.filtered_messages(|meta| meta.agent_visible);
     ///
-    /// // Get user-visible messages regardless of agent visibility (don't care about agent_visible)
-    /// let user_messages = conversation.filtered_messages(|meta| meta.user_visible);
-    ///
-    /// // Get messages visible to BOTH user and agent
-    /// let both_visible = conversation.filtered_messages(|meta| meta.user_visible && meta.agent_visible);
-    ///
     /// // Get messages visible ONLY to agent (not visible to user)
     /// let agent_only = conversation.filtered_messages(|meta| meta.agent_visible && !meta.user_visible);
-    ///
-    /// // Get messages visible ONLY to user (not visible to agent)
-    /// let user_only = conversation.filtered_messages(|meta| meta.user_visible && !meta.agent_visible);
-    ///
-    /// // Get invisible messages (neither user nor agent can see)
-    /// let invisible = conversation.filtered_messages(|meta| !meta.user_visible && !meta.agent_visible);
     /// ```
     pub fn filtered_messages<F>(&self, filter: F) -> Vec<Message>
     where
@@ -138,12 +126,10 @@ impl Conversation {
             .collect()
     }
 
-    /// Get only messages that are visible to the agent
     pub fn agent_visible_messages(&self) -> Vec<Message> {
         self.filtered_messages(|meta| meta.agent_visible)
     }
 
-    /// Get only messages that are visible to the user
     pub fn user_visible_messages(&self) -> Vec<Message> {
         self.filtered_messages(|meta| meta.user_visible)
     }
