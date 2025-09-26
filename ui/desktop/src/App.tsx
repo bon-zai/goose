@@ -316,6 +316,7 @@ export function AppInner() {
   const [didSelectProvider, setDidSelectProvider] = useState<boolean>(false);
 
   const navigate = useNavigate();
+  const setView = useMemo(() => createNavigationHandler(navigate), [navigate]);
 
   const location = useLocation();
   const [_searchParams, setSearchParams] = useSearchParams();
@@ -534,7 +535,7 @@ export function AppInner() {
         closeOnClick
         pauseOnHover
       />
-      <ExtensionInstallModal addExtension={addExtension} />
+      <ExtensionInstallModal addExtension={addExtension} setView={setView} />
       <div className="relative w-screen h-screen overflow-hidden bg-background-muted flex flex-col">
         <div className="titlebar-drag-region" />
         <Routes>
