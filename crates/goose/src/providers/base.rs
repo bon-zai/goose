@@ -425,6 +425,25 @@ pub trait Provider: Send + Sync {
 
     async fn stream(
         &self,
+        system: &str,
+        messages: &[Message],
+        tools: &[Tool],
+    ) -> Result<MessageStream, ProviderError> {
+        // Filter messages to only include agent_visible ones
+        let agent_visible_messages: Vec<Message> = messages
+            .iter()
+            .filter(|m| m.is_agent_visible())
+            .cloned()
+            .collect();
+
+        self.stream_impl(system, &agent_visible_messages, tools)
+            .await
+    }
+
+    /// Internal streaming method that providers should override to implement their streaming logic
+    /// This receives already-filtered messages (only agent_visible ones)
+    async fn stream_impl(
+        &self,
         _system: &str,
         _messages: &[Message],
         _tools: &[Tool],

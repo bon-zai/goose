@@ -245,7 +245,7 @@ impl Provider for AnthropicProvider {
         Ok(Some(models))
     }
 
-    async fn stream(
+    async fn stream_impl(
         &self,
         system: &str,
         messages: &[Message],

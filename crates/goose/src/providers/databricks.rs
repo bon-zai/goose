@@ -303,7 +303,7 @@ impl Provider for DatabricksProvider {
         Ok((message, ProviderUsage::new(response_model, usage)))
     }
 
-    async fn stream(
+    async fn stream_impl(
         &self,
         system: &str,
         messages: &[Message],

@@ -238,7 +238,7 @@ impl Provider for OllamaProvider {
         self.supports_streaming
     }
 
-    async fn stream(
+    async fn stream_impl(
         &self,
         system: &str,
         messages: &[Message],

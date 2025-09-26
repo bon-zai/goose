@@ -195,7 +195,7 @@ impl Provider for TetrateProvider {
         Ok((message, ProviderUsage::new(model, usage)))
     }
 
-    async fn stream(
+    async fn stream_impl(
         &self,
         system: &str,
         messages: &[Message],
