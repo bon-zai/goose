@@ -451,12 +451,12 @@ Here are some local providers we support:
           ```
 
           :::tip Context Length
-          If you notice that goose is having trouble using extensions or is ignoring [.goosehints](/docs/guides/using-goosehints), it is likely that the model's default context length of 2048 tokens is too low. Use `ramalama serve` to set the `--ctx-size, -c` option to a [higher value](https://github.com/containers/ramalama/blob/main/docs/ramalama-serve.1.md#--ctx-size--c).
+          If you notice that Goose is having trouble using extensions or is ignoring [.goosehints](/docs/guides/using-goosehints), it is likely that the model's default context length of 2048 tokens is too low. Use `ramalama serve` to set the `--ctx-size, -c` option to a [higher value](https://github.com/containers/ramalama/blob/main/docs/ramalama-serve.1.md#--ctx-size--c).
           :::
 
       </TabItem>
       <TabItem value="deepseek" label="DeepSeek-R1">
-        The native `DeepSeek-r1` model doesn't support tool calling, however, we have a [custom model](https://ollama.com/michaelneale/deepseek-r1-goose) you can use with goose. 
+        The native `DeepSeek-r1` model doesn't support tool calling, however, we have a [custom model](https://ollama.com/michaelneale/deepseek-r1-goose) you can use with Goose. 
 
         :::warning
         Note that this is a 70B model size and requires a powerful device to run smoothly.
@@ -470,7 +470,7 @@ Here are some local providers we support:
         ollama run michaelneale/deepseek-r1-goose
         ```
 
-        3. In a separate terminal window, configure with goose:
+        3. In a separate terminal window, configure with Goose:
 
         ```sh
         goose configure
@@ -555,7 +555,7 @@ Here are some local providers we support:
           ollama run qwen2.5
           ```
 
-        3. In a separate terminal window, configure with goose:
+        3. In a separate terminal window, configure with Goose:
 
           ```sh
           goose configure
@@ -638,7 +638,7 @@ Here are some local providers we support:
         ```
 
         :::tip Context Length
-        If you notice that goose is having trouble using extensions or is ignoring [.goosehints](/docs/guides/using-goosehints), it is likely that the model's default context length of 4096 tokens is too low. Set the `OLLAMA_CONTEXT_LENGTH` environment variable to a [higher value](https://github.com/ollama/ollama/blob/main/docs/faq.md#how-can-i-specify-the-context-window-size).
+        If you notice that Goose is having trouble using extensions or is ignoring [.goosehints](/docs/guides/using-goosehints), it is likely that the model's default context length of 4096 tokens is too low. Set the `OLLAMA_CONTEXT_LENGTH` environment variable to a [higher value](https://github.com/ollama/ollama/blob/main/docs/faq.md#how-can-i-specify-the-context-window-size).
         :::
         
       </TabItem>
@@ -655,7 +655,7 @@ Here are some local providers we support:
     docker model pull hf.co/unsloth/gemma-3n-e4b-it-gguf:q6_k
     ```
 
-    4. Configure goose to use Docker Model Runner, using the OpenAI API compatible endpoint: 
+    4. Configure Goose to use Docker Model Runner, using the OpenAI API compatible endpoint: 
 
     ```sh
     goose configure
@@ -718,7 +718,7 @@ Here are some local providers we support:
 
     Docker model runner uses `/engines/llama.cpp/v1/chat/completions` for the base path.
 
-    9. Finally configure the model available in Docker Model Runner to be used by goose: `hf.co/unsloth/gemma-3n-e4b-it-gguf:q6_k`
+    9. Finally configure the model available in Docker Model Runner to be used by Goose: `hf.co/unsloth/gemma-3n-e4b-it-gguf:q6_k`
 
     ```
     │
@@ -735,7 +735,7 @@ Here are some local providers we support:
 
 ## Azure OpenAI Credential Chain
 
-goose supports two authentication methods for Azure OpenAI:
+Goose supports two authentication methods for Azure OpenAI:
 
 1. **API Key Authentication** - Uses the `AZURE_OPENAI_API_KEY` for direct authentication
 2. **Azure Credential Chain** - Uses Azure CLI credentials automatically without requiring an API key
@@ -757,7 +757,7 @@ Beyond single-model setups, goose supports [multi-model configurations](/docs/gu
 
 ---
 
-If you have any questions or need help with a specific provider, feel free to reach out to us on [Discord](https://discord.gg/block-opensource) or on the [goose repo](https://github.com/block/goose).
+If you have any questions or need help with a specific provider, feel free to reach out to us on [Discord](https://discord.gg/block-opensource) or on the [Goose repo](https://github.com/block/goose).
 
 
 [providers]: /docs/getting-started/providers

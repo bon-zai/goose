@@ -154,7 +154,7 @@ These variables control how Goose manages conversation sessions and context.
 | `GOOSE_MAX_TURNS` | [Maximum number of turns](/docs/guides/sessions/smart-context-management#maximum-turns) allowed without user input | Integer (e.g., 10, 50, 100) | 1000 |
 | `CONTEXT_FILE_NAMES` | Specifies custom filenames for [hint/context files](/docs/guides/using-goosehints#custom-context-files) | JSON array of strings (e.g., `["CLAUDE.md", ".goosehints"]`) | `[".goosehints"]` |
 | `GOOSE_CLI_THEME` | [Theme](/docs/guides/goose-cli-commands#themes) for CLI response  markdown | "light", "dark", "ansi" | "dark" |
-| `GOOSE_SCHEDULER_TYPE` | Controls which scheduler Goose uses for [scheduled recipes](/docs/guides/recipes/session-recipes.md#schedule-recipe) | "legacy" or "temporal" | "legacy" (goose's built-in cron scheduler) | 
+| `GOOSE_SCHEDULER_TYPE` | Controls which scheduler Goose uses for [scheduled recipes](/docs/guides/recipes/session-recipes.md#schedule-recipe) | "legacy" or "temporal" | "legacy" (Goose's built-in cron scheduler) | 
 | `GOOSE_TEMPORAL_BIN` | Optional custom path to your Temporal binary | /path/to/temporal-service | None |
 | `GOOSE_RANDOM_THINKING_MESSAGES` | Controls whether to show amusing random messages during processing | "true", "false" | "true" |
 | `GOOSE_CLI_SHOW_COST` | Toggles display of model cost estimates in CLI output | "true", "1" (case insensitive) to enable | false |
@@ -344,7 +344,7 @@ These variables are automatically set by Goose during command execution.
 Sometimes you want Goose to use different commands or have different shell behavior than your normal terminal usage. For example, you might want Goose to use a different tool, or prevent Goose from running long-running development servers that could hang the AI agent. This is most useful when using Goose CLI, where shell commands are executed directly in your terminal environment.
 
 **How it works:**
-1. When goose runs commands, `GOOSE_TERMINAL` is automatically set to "1"
+1. When Goose runs commands, `GOOSE_TERMINAL` is automatically set to "1"
 2. Your shell configuration can detect this and direct Goose to change its default behavior while keeping your normal terminal usage unchanged
 
 **Example:**

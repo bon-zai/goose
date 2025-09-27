@@ -17,7 +17,7 @@ When working with [Large Language Models (LLMs)](/docs/getting-started/providers
 - **Turn**: One complete prompt-response interaction between Goose and the LLM
 
 ## How Goose Manages Context
-goose uses a two-tiered approach to context management:
+Goose uses a two-tiered approach to context management:
 
 1. **Auto-Compaction**: Proactively summarizes conversation when approaching token limits
 2. **Context Strategies**: Backup strategy used if the context limit is still exceeded after auto-compaction
