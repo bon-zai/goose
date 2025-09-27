@@ -6,7 +6,7 @@ sidebar_label: Configuration File
 
 # Configuration File
 
-goose uses a YAML configuration file to manage settings and extensions. This file is located at:
+Goose uses a YAML configuration file to manage settings and extensions. This file is located at:
 
 * macOS/Linux: `~/.config/goose/config.yaml`
 * Windows: `%APPDATA%\Block\goose\config\config.yaml`
@@ -100,7 +100,7 @@ Extensions are configured under the `extensions` key. Each extension can have th
 ```yaml
 extensions:
   extension_name:
-    bundled: true/false        # Whether it's included with goose
+    bundled: true/false        # Whether it's included with Goose
     display_name: "Name"       # Human-readable name (optional)
     enabled: true/false        # Whether the extension is active
     name: "extension_name"     # Internal name
@@ -131,7 +131,7 @@ Settings are applied in the following order of precedence:
 
 ## Updating Configuration
 
-Changes to the config file require restarting goose to take effect. You can verify your current configuration using:
+Changes to the config file require restarting Goose to take effect. You can verify your current configuration using:
 
 ```bash
 goose info -v
