@@ -35,7 +35,7 @@ The following settings can be configured at the root level of your config.yaml f
 | `GOOSE_CLI_SHOW_COST` | Show estimated cost for token use in the CLI | true/false | false | No |
 | `GOOSE_ALLOWLIST` | URL for allowed extensions | Valid URL | None | No |
 | `GOOSE_RECIPE_GITHUB_REPO` | GitHub repository for recipes | Format: "org/repo" | None | No |
-| `GOOSE_AUTO_COMPACT_THRESHOLD` | Set the percentage threshold at which goose [automatically summarizes your session](/docs/guides/sessions/smart-context-management#automatic-compaction). | Float between 0.0 and 1.0 (disabled at 0.0)| 0.8 | No |
+| `GOOSE_AUTO_COMPACT_THRESHOLD` | Set the percentage threshold at which Goose [automatically summarizes your session](/docs/guides/sessions/smart-context-management#automatic-compaction). | Float between 0.0 and 1.0 (disabled at 0.0)| 0.8 | No |
 
 :::info Automatic Multi-Model Configuration
 The experimental [AutoPilot](/docs/guides/multi-model/autopilot) feature provides intelligent, context-aware model switching. Configure models for different roles using the `x-advanced-models` setting.
