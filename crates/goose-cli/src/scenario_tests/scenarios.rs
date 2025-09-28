@@ -10,7 +10,9 @@ mod tests {
     use goose::conversation::message::Message;
 
     #[tokio::test]
+    #[serial]
     async fn test_what_is_your_name() -> Result<()> {
+        std::env::set_var("GOOSE_MOIM_ENABLED", "false");
         run_scenario(
             "what_is_your_name",
             text("what is your name"),
@@ -26,10 +28,13 @@ mod tests {
             },
         )
         .await
+        std::env::remove_var("GOOSE_MOIM_ENABLED");
     }
 
     #[tokio::test]
+    #[serial]
     async fn test_weather_tool() -> Result<()> {
+        std::env::set_var("GOOSE_MOIM_ENABLED", "false");
         // Google tells me it only knows about the weather in the US, so we skip it.
         run_scenario(
             "weather_tool",
@@ -56,10 +61,13 @@ mod tests {
             },
         )
         .await
+        std::env::remove_var("GOOSE_MOIM_ENABLED");
     }
 
     #[tokio::test]
+    #[serial]
     async fn test_image_analysis() -> Result<()> {
+        std::env::set_var("GOOSE_MOIM_ENABLED", "false");
         // Google says it doesn't know about images, the other providers complain about
         // the image format, so we only run this for OpenAI and Anthropic.
         run_scenario(
@@ -74,10 +82,13 @@ mod tests {
             },
         )
         .await
+        std::env::remove_var("GOOSE_MOIM_ENABLED");
     }
 
     #[tokio::test]
+    #[serial]
     async fn test_context_length_exceeded_error() -> Result<()> {
+        std::env::set_var("GOOSE_MOIM_ENABLED", "false");
         run_scenario(
             "context_length_exceeded",
             Box::new(|provider| {
@@ -101,5 +112,6 @@ mod tests {
             },
         )
         .await
+        std::env::remove_var("GOOSE_MOIM_ENABLED");
     }
 }
