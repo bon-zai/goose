@@ -8,12 +8,13 @@ mod tests {
     use crate::scenario_tests::scenario_runner::run_scenario;
     use anyhow::Result;
     use goose::conversation::message::Message;
+    use serial_test::serial;
 
     #[tokio::test]
     #[serial]
     async fn test_what_is_your_name() -> Result<()> {
         std::env::set_var("GOOSE_MOIM_ENABLED", "false");
-        run_scenario(
+        let result = run_scenario(
             "what_is_your_name",
             text("what is your name"),
             None,
@@ -27,8 +28,9 @@ mod tests {
                 Ok(())
             },
         )
-        .await
+        .await;
         std::env::remove_var("GOOSE_MOIM_ENABLED");
+        result
     }
 
     #[tokio::test]
@@ -36,7 +38,7 @@ mod tests {
     async fn test_weather_tool() -> Result<()> {
         std::env::set_var("GOOSE_MOIM_ENABLED", "false");
         // Google tells me it only knows about the weather in the US, so we skip it.
-        run_scenario(
+        let result = run_scenario(
             "weather_tool",
             text("tell me what the weather is in Berlin, Germany"),
             Some(&["Google"]),
@@ -60,8 +62,9 @@ mod tests {
                 Ok(())
             },
         )
-        .await
+        .await;
         std::env::remove_var("GOOSE_MOIM_ENABLED");
+        result
     }
 
     #[tokio::test]
@@ -70,7 +73,7 @@ mod tests {
         std::env::set_var("GOOSE_MOIM_ENABLED", "false");
         // Google says it doesn't know about images, the other providers complain about
         // the image format, so we only run this for OpenAI and Anthropic.
-        run_scenario(
+        let result = run_scenario(
             "image_analysis",
             image("What do you see in this image?", "test_image"),
             Some(&["Google", "azure_openai", "groq"]),
@@ -81,15 +84,16 @@ mod tests {
                 Ok(())
             },
         )
-        .await
+        .await;
         std::env::remove_var("GOOSE_MOIM_ENABLED");
+        result
     }
 
     #[tokio::test]
     #[serial]
     async fn test_context_length_exceeded_error() -> Result<()> {
         std::env::set_var("GOOSE_MOIM_ENABLED", "false");
-        run_scenario(
+        let result = run_scenario(
             "context_length_exceeded",
             Box::new(|provider| {
                 let model_config = provider.get_model_config();
@@ -111,7 +115,8 @@ mod tests {
                 Ok(())
             },
         )
-        .await
+        .await;
         std::env::remove_var("GOOSE_MOIM_ENABLED");
+        result
     }
 }

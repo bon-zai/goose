@@ -1,8 +1,8 @@
 use crate::agents::types::SessionConfig;
 use crate::conversation::message::Message;
 use crate::conversation::Conversation;
-use crate::session::extension_data::ExtensionState;
-use crate::session::{self, TodoState};
+use crate::session::extension_data::{ExtensionState, TodoState};
+use crate::session::SessionManager;
 use chrono::Local;
 
 async fn build_moim_content(session: &Option<SessionConfig>) -> Option<String> {
@@ -83,18 +83,12 @@ pub async fn inject_moim_if_enabled(
 async fn get_todo_context(session: &Option<SessionConfig>) -> Option<String> {
     let session_config = session.as_ref()?;
 
-    match session::storage::get_path(session_config.id.clone()) {
-        Ok(path) => match session::storage::read_metadata(&path) {
-            Ok(metadata) => TodoState::from_extension_data(&metadata.extension_data)
-                .map(|state| state.content)
-                .filter(|content| !content.trim().is_empty()),
-            Err(e) => {
-                tracing::debug!("Could not read session metadata for MOIM: {}", e);
-                None
-            }
-        },
+    match SessionManager::get_session(&session_config.id, false).await {
+        Ok(session_data) => TodoState::from_extension_data(&session_data.extension_data)
+            .map(|state| state.content)
+            .filter(|content| !content.trim().is_empty()),
         Err(e) => {
-            tracing::debug!("Could not get session path for MOIM: {}", e);
+            tracing::debug!("Could not read session for MOIM: {}", e);
             None
         }
     }
