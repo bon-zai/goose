@@ -1,8 +1,6 @@
 use goose::agents::moim;
 use goose::conversation::message::Message;
 use goose::conversation::Conversation;
-use mcp_core::tool::ToolCall;
-use rmcp::model::Content;
 use serial_test::serial;
 
 // All async tests that call inject_moim_if_enabled need #[serial] because
@@ -45,18 +43,29 @@ async fn test_moim_disabled_no_injection() {
 #[serial]
 async fn test_moim_respects_tool_pairs() {
     // Critical test: ensure MOIM doesn't break tool call/response pairs
-    let tool_call = Ok(ToolCall::new(
-        "test_tool",
-        serde_json::json!({"param": "value"}),
-    ));
-    let tool_result = Ok(vec![Content::text("Tool executed successfully")]);
+    use rmcp::model::{CallToolRequestParam, Content};
+
+    // Create a tool request message using the builder method
+    let assistant_msg = Message::assistant()
+        .with_text("I'll use the tool for you")
+        .with_tool_request(
+            "tool1",
+            Ok(CallToolRequestParam {
+                name: "test_tool".into(),
+                arguments: None,
+            }),
+        );
+
+    // Create a tool response message using the builder method
+    let user_msg = Message::user().with_tool_response(
+        "tool1",
+        Ok(vec![Content::text("Tool executed successfully")]),
+    );
 
     let messages = vec![
         Message::user().with_text("Please use the tool"),
-        Message::assistant()
-            .with_text("I'll use the tool for you")
-            .with_tool_request("tool1", tool_call),
-        Message::user().with_tool_response("tool1", tool_result),
+        assistant_msg,
+        user_msg,
         Message::assistant().with_text("The tool has been executed"),
         Message::user().with_text("Thank you"),
     ];
@@ -85,13 +94,24 @@ async fn test_moim_respects_tool_pairs() {
 #[test]
 fn test_find_safe_insertion_point_ending_with_tool_response() {
     // Critical test: when conversation ends with tool response, don't break the pair
-    let tool_call = Ok(ToolCall::new("test_tool", serde_json::json!({})));
-    let tool_result = Ok(vec![Content::text("Result")]);
+    use rmcp::model::{CallToolRequestParam, Content};
+
+    // Create a tool request message using the builder method
+    let assistant_msg = Message::assistant().with_tool_request(
+        "tool1",
+        Ok(CallToolRequestParam {
+            name: "test_tool".into(),
+            arguments: None,
+        }),
+    );
+
+    // Create a tool response message using the builder method
+    let user_msg = Message::user().with_tool_response("tool1", Ok(vec![Content::text("Result")]));
 
     let messages = vec![
         Message::user().with_text("Do something"),
-        Message::assistant().with_tool_request("tool1", tool_call),
-        Message::user().with_tool_response("tool1", tool_result),
+        assistant_msg,
+        user_msg,
     ];
 
     // Should insert before the tool call instead (index 1)
