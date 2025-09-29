@@ -10,6 +10,7 @@ use tokio_util::sync::CancellationToken;
 use goose::agents::extension::{Envs, ExtensionConfig};
 use goose::agents::extension_manager::ExtensionManager;
 
+use serial_test::serial;
 use test_case::test_case;
 
 enum TestMode {
@@ -77,11 +78,14 @@ enum TestMode {
     vec![]
 )]
 #[tokio::test]
+#[serial]
 async fn test_replayed_session(
     command: Vec<&str>,
     tool_calls: Vec<CallToolRequestParam>,
     required_envs: Vec<&str>,
 ) {
+    // Disable MOIM for replayed sessions to ensure consistency with recorded data
+    std::env::set_var("GOOSE_MOIM_ENABLED", "false");
     let replay_file_name = command
         .iter()
         .map(|s| s.replace("/", "_"))
@@ -201,4 +205,5 @@ async fn test_replayed_session(
         }
         panic!("Test failed: {:?}", err);
     }
+    std::env::remove_var("GOOSE_MOIM_ENABLED");
 }
