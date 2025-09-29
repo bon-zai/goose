@@ -91,41 +91,38 @@ impl AgentManager {
         session_id: String,
         mode: SessionExecutionMode,
     ) -> Result<Arc<Agent>> {
-        let agent = {
+        let (agent, is_new) = {
             let mut sessions = self.sessions.write().await;
-            if let Some(agent) = sessions.get(&session_id) {
-                debug!("Found existing agent for session {}", session_id);
-                return Ok(Arc::clone(agent));
+            if let Some(existing) = sessions.get(&session_id) {
+                (Arc::clone(existing), false)
+            } else {
+                let agent = Arc::new(Agent::new());
+                sessions.put(session_id.clone(), agent.clone());
+                (agent, true)
             }
-
-            info!(
-                "Creating new agent for session {} with mode {}",
-                session_id, mode
-            );
-            let agent = Arc::new(Agent::new());
-            sessions.put(session_id.clone(), Arc::clone(&agent));
-            agent
         };
 
-        match &mode {
-            SessionExecutionMode::Interactive | SessionExecutionMode::Background => {
-                debug!("Setting scheduler on agent for session {}", session_id);
-                agent.set_scheduler(Arc::clone(&self.scheduler)).await;
+        if is_new {
+            match &mode {
+                SessionExecutionMode::Interactive | SessionExecutionMode::Background => {
+                    debug!("Setting scheduler on agent for session {}", session_id);
+                    agent.set_scheduler(Arc::clone(&self.scheduler)).await;
+                }
+                SessionExecutionMode::SubTask { .. } => {
+                    debug!(
+                        "SubTask mode for session {}, skipping scheduler setup",
+                        session_id
+                    );
+                }
             }
-            SessionExecutionMode::SubTask { .. } => {
+
+            if let Some(provider) = &*self.default_provider.read().await {
                 debug!(
-                    "SubTask mode for session {}, skipping scheduler setup",
+                    "Setting default provider on agent for session {}",
                     session_id
                 );
+                let _ = agent.update_provider(Arc::clone(provider)).await;
             }
-        }
-
-        if let Some(provider) = &*self.default_provider.read().await {
-            debug!(
-                "Setting default provider on agent for session {}",
-                session_id
-            );
-            let _ = agent.update_provider(Arc::clone(provider)).await;
         }
 
         Ok(agent)
