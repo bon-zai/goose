@@ -74,7 +74,6 @@ pub async fn check_compaction_needed(
             let token_counter = create_async_token_counter()
                 .await
                 .map_err(|e| anyhow::anyhow!("Failed to create token counter: {}", e))?;
-
             let token_counts = get_messages_token_counts_async(&token_counter, messages);
             (token_counts.iter().sum(), "estimated")
         }
