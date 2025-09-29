@@ -1,7 +1,7 @@
 use goose::agents::moim;
 use goose::conversation::message::Message;
 use goose::conversation::Conversation;
-use mcp_core::ToolCall;
+use mcp_core::tool::ToolCall;
 use rmcp::model::Content;
 use serial_test::serial;
 
