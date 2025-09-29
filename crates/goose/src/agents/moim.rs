@@ -23,7 +23,6 @@ async fn build_moim_content(session: &Option<SessionConfig>) -> Option<String> {
 /// We want to insert as close to the end as possible, but we must avoid
 /// breaking tool call/response pairs. We check if inserting at a position
 /// would separate a tool call from its response.
-#[doc(hidden)]
 pub fn find_safe_insertion_point(messages: &[Message]) -> usize {
     if messages.is_empty() {
         return 0;
