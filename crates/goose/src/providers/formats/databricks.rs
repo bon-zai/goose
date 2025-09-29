@@ -29,7 +29,7 @@ struct DatabricksMessage {
 ///   even though the message structure is otherwise following openai, the enum switches this
 fn format_messages(messages: &[Message], image_format: &ImageFormat) -> Vec<DatabricksMessage> {
     let mut result = Vec::new();
-    for message in messages {
+    for message in messages.iter().filter(|m| m.is_agent_visible()) {
         let mut converted = DatabricksMessage {
             content: Value::Null,
             role: match message.role {
