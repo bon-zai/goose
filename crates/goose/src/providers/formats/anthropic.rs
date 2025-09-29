@@ -32,7 +32,6 @@ const DATA_FIELD: &str = "data";
 pub fn format_messages(messages: &[Message]) -> Vec<Value> {
     let mut anthropic_messages = Vec::new();
 
-    // Filter messages to only include agent_visible ones and convert to Anthropic format
     for message in messages.iter().filter(|m| m.is_agent_visible()) {
         let role = match message.role {
             Role::User => USER_ROLE,

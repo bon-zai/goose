@@ -43,8 +43,6 @@ pub fn get_messages_token_counts_async(
     token_counter: &AsyncTokenCounter,
     messages: &[Message],
 ) -> Vec<usize> {
-    // Use count_chat_tokens to ensure we capture the full content of the message,
-    // including ToolRequests and ToolResponses
     messages
         .iter()
         .filter(|m| m.is_agent_visible())
@@ -91,7 +89,6 @@ pub fn get_token_counts_async(
     // Take into account the system prompt (includes goosehints), and our tools input
     let system_prompt_token_count = token_counter.count_tokens(system_prompt);
     let tools_token_count = token_counter.count_tokens_for_tools(tools.as_slice());
-    // get_messages_token_counts_async now handles filtering internally
     let messages_token_count = get_messages_token_counts_async(token_counter, messages);
 
     ChatTokenCounts {

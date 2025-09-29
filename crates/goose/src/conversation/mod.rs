@@ -102,23 +102,6 @@ impl Conversation {
         self.0.clear();
     }
 
-    /// Filter messages based on visibility criteria.
-    ///
-    /// # Arguments
-    /// * `filter` - A closure that takes a MessageMetadata and returns whether to include the message
-    ///
-    /// # Examples
-    /// ```
-    /// # use goose::conversation::{Conversation, message::Message};
-    /// # let conversation = Conversation::new_unvalidated(vec![
-    /// #     Message::user().with_text("Hello")
-    /// # ]);
-    /// // Get agent-visible messages regardless of user visibility (don't care about user_visible)
-    /// let agent_messages = conversation.filtered_messages(|meta| meta.agent_visible);
-    ///
-    /// // Get messages visible ONLY to agent (not visible to user)
-    /// let agent_only = conversation.filtered_messages(|meta| meta.agent_visible && !meta.user_visible);
-    /// ```
     pub fn filtered_messages<F>(&self, filter: F) -> Vec<Message>
     where
         F: Fn(&MessageMetadata) -> bool,
