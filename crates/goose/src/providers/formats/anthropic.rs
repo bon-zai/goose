@@ -96,14 +96,18 @@ pub fn format_messages(messages: &[Message]) -> Vec<Value> {
                 MessageContent::SummarizationRequested(_) => {
                     // Skip
                 }
-                MessageContent::Thinking(_) => {
-                    // Skip thinking blocks - they should not be sent to the API
-                    // Thinking is only for internal use
-                    continue;
+                MessageContent::Thinking(thinking) => {
+                    content.push(json!({
+                        TYPE_FIELD: THINKING_TYPE,
+                        THINKING_TYPE: thinking.thinking,
+                        SIGNATURE_FIELD: thinking.signature
+                    }));
                 }
-                MessageContent::RedactedThinking(_) => {
-                    // Skip redacted thinking - internal use only
-                    continue;
+                MessageContent::RedactedThinking(redacted) => {
+                    content.push(json!({
+                        TYPE_FIELD: REDACTED_THINKING_TYPE,
+                        DATA_FIELD: redacted.data
+                    }));
                 }
                 MessageContent::Image(_) => continue, // Anthropic doesn't support image content yet
                 MessageContent::FrontendToolRequest(tool_request) => {
