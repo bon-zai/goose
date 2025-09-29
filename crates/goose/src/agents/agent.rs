@@ -519,7 +519,6 @@ impl Agent {
                 "Frontend tool execution required".to_string(),
                 None,
             )))
-
         } else if tool_call.name == TODO_WRITE_TOOL_NAME {
             // Handle task planner write tool
             let content = match tool_call.arguments {
