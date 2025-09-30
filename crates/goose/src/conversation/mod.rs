@@ -1,4 +1,4 @@
-use crate::conversation::message::{Message, MessageContent};
+use crate::conversation::message::{Message, MessageContent, MessageMetadata};
 use rmcp::model::Role;
 use serde::{Deserialize, Serialize};
 use std::collections::HashSet;
@@ -101,6 +101,25 @@ impl Conversation {
 
     pub fn clear(&mut self) {
         self.0.clear();
+    }
+
+    pub fn filtered_messages<F>(&self, filter: F) -> Vec<Message>
+    where
+        F: Fn(&MessageMetadata) -> bool,
+    {
+        self.0
+            .iter()
+            .filter(|msg| filter(&msg.metadata))
+            .cloned()
+            .collect()
+    }
+
+    pub fn agent_visible_messages(&self) -> Vec<Message> {
+        self.filtered_messages(|meta| meta.agent_visible)
+    }
+
+    pub fn user_visible_messages(&self) -> Vec<Message> {
+        self.filtered_messages(|meta| meta.user_visible)
     }
 
     fn validate(self) -> Result<Self, InvalidConversation> {

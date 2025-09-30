@@ -13,7 +13,7 @@ pub fn format_messages(messages: &[Message]) -> Vec<Value> {
     let mut snowflake_messages = Vec::new();
 
     // Convert messages to Snowflake format
-    for message in messages {
+    for message in messages.iter().filter(|m| m.is_agent_visible()) {
         let role = match message.role {
             Role::User => "user",
             Role::Assistant => "assistant",

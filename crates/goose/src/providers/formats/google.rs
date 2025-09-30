@@ -17,6 +17,7 @@ use std::ops::Deref;
 pub fn format_messages(messages: &[Message]) -> Vec<Value> {
     messages
         .iter()
+        .filter(|m| m.is_agent_visible())
         .filter(|message| {
             message
                 .content
